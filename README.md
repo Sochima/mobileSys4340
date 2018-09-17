@@ -1,6 +1,6 @@
 # mobileSys
 bluetoothP2P
-Using Andriod Studio
+Using Android Studio
 
 Resources:
 
