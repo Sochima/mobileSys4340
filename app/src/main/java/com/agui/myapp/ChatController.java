@@ -15,19 +15,33 @@ package com.agui.myapp;
  * limitations under the License.
  */
 
-        import android.bluetooth.BluetoothAdapter;
-        import android.bluetooth.BluetoothDevice;
-        import android.bluetooth.BluetoothServerSocket;
-        import android.bluetooth.BluetoothSocket;
-        import android.content.Context;
-        import android.os.Bundle;
-        import android.os.Handler;
-        import android.os.Message;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 
-        import java.io.IOException;
-        import java.io.InputStream;
-        import java.io.OutputStream;
-        import java.util.UUID;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
+
+// imports for file modification
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Date;
 
 public class ChatController {
     private static final String APP_NAME = "BluetoothChatApp";
@@ -39,6 +53,24 @@ public class ChatController {
     private ConnectThread connectThread;
     private ReadWriteThread connectedThread;
     private int state;
+
+    //private static final File mainDir = null;
+    private static final String dir = "mobSys";
+    private static final String file = "helloWorld.txt";
+    private static final int READ_BLOCK_SIZE = 1024;
+
+    //preferences to store timestamp when data is saved
+    private static SharedPreferences timeSharedPreferences;
+    private static SharedPreferences.Editor editor;
+
+    //preferences name and keyvalue
+    private static final String SharedPreferencesName = "TimePreferences";
+    private static final String TimeKeyValue = "TimeKeyValue";
+
+    private static final int PERMISSION_REQUEST_CODE = 122;
+
+    private String inputMessage;
+
 
     static final int STATE_NONE = 0;
     static final int STATE_LISTEN = 1;
@@ -328,6 +360,48 @@ public class ChatController {
                 try {
                     // Read from the InputStream
                     bytes = inputStream.read(buffer);
+                    inputMessage = new String(buffer, 0,bytes);
+                    System.out.println(inputMessage);
+
+                    File path = Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DOCUMENTS);
+                    File file = new File(path, "helloWorld.txt");
+
+                    try {
+                        // Make sure the Pictures directory exists.
+                        path.mkdirs();
+
+                        // Very simple code to copy a picture from the application's
+                        // resource into the external file.  Note that this code does
+                        // no error checking, and assumes the picture is small (does not
+                        // try to copy it in chunks).  Note that if external storage is
+                        // not currently mounted this will silently fail.
+                        //InputStream is = getResources().openRawResource(R.drawable.balloons);
+                        //OutputStream os = new FileOutputStream(file);
+                        //byte[] data = new byte[is.available()];
+                        //is.read(data);
+                        OutputStream oos = new FileOutputStream(file);
+                        oos.write(bytes);
+                        //is.close();
+                        oos.close();
+
+                        // Tell the media scanner about the new file so that it is
+                        // immediately available to the user.
+//                        MediaScannerConnection.scanFile(this,
+//                                new String[] { file.toString() }, null,
+//                                new MediaScannerConnection.OnScanCompletedListener() {
+//                                    public void onScanCompleted(String path, Uri uri) {
+//                                        Log.i("ExternalStorage", "Scanned " + path + ":");
+//                                        Log.i("ExternalStorage", "-> uri=" + uri);
+//                                    }
+//                                });
+                    } catch (IOException e) {
+                        // Unable to create file, likely because external storage is
+                        // not currently mounted.
+                        Log.w("ExternalStorage", "Error writing " + file, e);
+                    }
+
+
 
                     // Send the obtained bytes to the UI Activity
                     handler.obtainMessage(MainActivity.MESSAGE_READ, bytes, -1,
@@ -357,6 +431,16 @@ public class ChatController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        public File getPublicAlbumStorageDir(String DocName) {
+            // Get the directory for the user's public Docs directory.
+            File file = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOCUMENTS), DocName);
+            if (!file.mkdirs()) {
+                //Log.e(LOG_TAG, "Directory not created");
+                System.out.println("not created");
+            }
+            return file;
         }
     }
 }
