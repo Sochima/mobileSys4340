@@ -15,33 +15,31 @@ public class DirectoryFileObserver extends FileObserver {
     String newPath;
     long mod;
 
-    public DirectoryFileObserver(String path){
-        super(path, FileObserver.CREATE);
+    public DirectoryFileObserver(String path) {
+        super(path, FileObserver.ALL_EVENTS);
         absolutePath = path;
     }
 
-    public String getPath(){
+    public String getPath() {
         return newPath;
     }
 
     @Override
-    public void onEvent(int event, String path){
+    public void onEvent(int event, String path) {
 
-        switch(event){
-            case FileObserver.CREATE:
-                Log.e("FO:", "CREATE: " + path);
-                check = new File(path);
-                mod = check.lastModified();
-                newPath = path;
-
-                break;
+        switch (event) {
+//            case FileObserver.CREATE:
+//                Log.e("FO:", "CREATE: " + path);
+//                check = new File(path);
+//                mod = check.lastModified();
+//                newPath = path;
+//
+//                break;
             case FileObserver.MODIFY:
                 Log.e("FO:", "MODIFY");
 
                 break;
         }
-        if(path != null){
-            Log.e("FileObserver:", "File Created");
-        }
+
     }
 }

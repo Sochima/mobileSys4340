@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int DISCOVER_DURATION = 300;
     private static final int REQUEST_BLU = 1;
 
-    DirectoryFileObserver dfo;
+    Context context;
     String path;
 
     private static final String[] INITIAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -50,14 +50,15 @@ public class MainActivity extends AppCompatActivity {
 
     //FileObserver observer = new FileObserver("/storage/emulated/0/Download");
 
-
-
+    DirectoryFileObserver dfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView_FileName = (TextView) findViewById(R.id.textView_FileName);
-
+        //String check = textView_FileName.getText().toString();
+        //System.out.println(check);
+        context = this;
         dfo = new DirectoryFileObserver("/storage/emulated/0/Download");
         dfo.startWatching();
 
@@ -71,19 +72,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        String ret = dfo.getPath();
-        File temp = new File(ret);
+        //String ret = dfo.getPath();
+        //File temp = new File(ret);
 
-        if(dfo.mod != temp.lastModified()){
+        //if(dfo.mod != temp.lastModified()){
             //call sync
-            Log.e("OnPResume", dfo.mod + "/n" + temp.lastModified());
-        }
-        dfo.startWatching();
+            //Log.e("OnPResume", dfo.mod + "/n" + temp.lastModified());
+       // }
+        //dfo.startWatching();
+       // dfo = new DirectoryFileObserver("/storage/emulated/0/Download");
+       // dfo.startWatching();
+        Log.e("FO:", "on resume");
+    }
+    public void onPause(){
+        super.onPause();
+        //get time stamp
+        Log.e("FO:", "on pause");
+        //dfo = new DirectoryFileObserver("/storage/emulated/0/Download");
+        //dfo.startWatching();
     }
 
     @Override
     public void onPostResume(){
         super.onPostResume();
+        Log.e("FO:", "post resume");
+        //check time stamp
+        //dfo = new DirectoryFileObserver("/storage/emulated/0/Download");
+       // dfo.startWatching();
 
     }
 
@@ -95,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_WRITE_STORAGE:
                 if (canAccessWriteStorage()) {
                     //reload my activity with permission granted or use the features what required the permission
-                    System.out.println("permission grantedddd");
+                    System.out.println("permission granted");
 
                 } else {
                     Toast.makeText(this, "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
@@ -174,7 +189,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d("", "Video URI= " + uriPath);
 
             path = getPath(this, uriPath);// "/mnt/sdcard/FileName.mp3"
-            System.out.println("pathhhh " + path);
+            System.out.println(path);
+            // path is here .....
             textView_FileName.setText(path);
 
         } else {
