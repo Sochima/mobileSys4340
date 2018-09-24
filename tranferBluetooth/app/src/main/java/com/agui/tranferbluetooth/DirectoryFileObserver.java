@@ -1,10 +1,15 @@
 package com.agui.tranferbluetooth;
 
-import android.content.Intent;
+
+import android.content.ContentValues;
+
+
 import android.os.FileObserver;
 import android.util.Log;
 
 import java.io.File;
+import java.util.List;
+
 
 /**
  * Created by aguil on 9/23/2018.
@@ -15,7 +20,7 @@ public class DirectoryFileObserver extends FileObserver {
     File check;
     String newPath;
     long mod;
-    MainActivity resend;
+    MainActivity resend = new MainActivity();
 
     public DirectoryFileObserver(String path, MainActivity main) {
         super(path, FileObserver.ALL_EVENTS);
@@ -31,20 +36,25 @@ public class DirectoryFileObserver extends FileObserver {
     public void onEvent(int event, String path) {
 
         switch (event) {
-//            case FileObserver.CREATE:
-//                Log.e("FO:", "CREATE: " + path);
-//                check = new File(path);
-//                mod = check.lastModified();
-//                newPath = path;
-//
-//                break;
-            case FileObserver.MODIFY:
-                Log.e("FO:", "MODIFY");
-                resend.resendFile(path);
-                resend.textView_FileName.setText("File Modified");
+            case FileObserver.CREATE:
+                Log.e("FO:", "CREATE: " + path);
 
                 break;
+            case FileObserver.MODIFY:
+                Log.e("FO:", "MODIFY");
+                //Uri uri = Uri.parse(uriString);
+                resend.textView_FileName.setText("File Modified");
+                ContentValues val = new ContentValues();
+                val.put(BluetoothShare.URI,"/storage/emulated/0/Documents/helloWorld.txt");
+                val.put(BluetoothShare.DESTINATION, "B8:1D:AA:02:DO:AD");
+                val.put(BluetoothShare.DIRECTION, BluetoothShare.DIRECTION_OUTBOUND);
+
+
+
+
         }
 
     }
+
+
 }

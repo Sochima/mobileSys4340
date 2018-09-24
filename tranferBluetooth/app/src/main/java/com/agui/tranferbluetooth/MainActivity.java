@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int DISCOVER_DURATION = 300;
     private static final int REQUEST_BLU = 1;
+    public static String uriString;
 
     Context context;
     String path;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         //String check = textView_FileName.getText().toString();
         //System.out.println(check);
         context = this;
-        dfo = new DirectoryFileObserver("/storage/emulated/0/Download", this);
+        dfo = new DirectoryFileObserver("/storage/emulated/0/Documents", this);
         dfo.startWatching();
 
         if (!canAccessLocation() || !canAccessCamera() || !canAccessWriteStorage() || !canAccessReadStorage() || !canAccessReadContacts() || !canAccessWriteContacts()) {
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void resendFile(String path){
         Uri uri = Uri.fromFile(new File(path));
+        uriString = uri.toString();
 
         Intent mediaIntent = new Intent();
         mediaIntent.setData(uri);
