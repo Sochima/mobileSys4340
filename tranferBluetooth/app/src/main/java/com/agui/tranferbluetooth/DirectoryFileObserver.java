@@ -1,5 +1,6 @@
 package com.agui.tranferbluetooth;
 
+import android.content.Intent;
 import android.os.FileObserver;
 import android.util.Log;
 
@@ -14,9 +15,11 @@ public class DirectoryFileObserver extends FileObserver {
     File check;
     String newPath;
     long mod;
+    MainActivity resend;
 
-    public DirectoryFileObserver(String path) {
+    public DirectoryFileObserver(String path, MainActivity main) {
         super(path, FileObserver.ALL_EVENTS);
+        resend = main;
         absolutePath = path;
     }
 
@@ -37,6 +40,8 @@ public class DirectoryFileObserver extends FileObserver {
 //                break;
             case FileObserver.MODIFY:
                 Log.e("FO:", "MODIFY");
+                resend.resendFile(path);
+                resend.textView_FileName.setText("File Modified");
 
                 break;
         }

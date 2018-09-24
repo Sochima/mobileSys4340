@@ -26,6 +26,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
+import static android.net.Uri.*;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         //String check = textView_FileName.getText().toString();
         //System.out.println(check);
         context = this;
-        dfo = new DirectoryFileObserver("/storage/emulated/0/Download");
+        dfo = new DirectoryFileObserver("/storage/emulated/0/Download", this);
         dfo.startWatching();
 
         if (!canAccessLocation() || !canAccessCamera() || !canAccessWriteStorage() || !canAccessReadStorage() || !canAccessReadContacts() || !canAccessWriteContacts()) {
@@ -139,6 +141,15 @@ public class MainActivity extends AppCompatActivity {
         mediaIntent.setType("*/*"); //set mime type as per requirement
         startActivityForResult(mediaIntent, 1001);
     }
+    public void resendFile(String path){
+        Uri uri = Uri.fromFile(new File(path));
+
+        Intent mediaIntent = new Intent();
+        mediaIntent.setData(uri);
+        mediaIntent.setType("*/*"); //set mime type as per requirement
+        startActivityForResult(mediaIntent, 1001);
+        //enableBluetooth();
+    }
 
     public void enableBluetooth() {
         Intent discoveryIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
@@ -156,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setType("*/*");
 
             File f = new File(path);
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
+            intent.putExtra(Intent.EXTRA_STREAM, fromFile(f));
 
             PackageManager pm = getPackageManager();
             List<ResolveInfo> appsList = pm.queryIntentActivities(intent, 0);
@@ -249,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                        parse("content://downloads/public_downloads"), Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }
