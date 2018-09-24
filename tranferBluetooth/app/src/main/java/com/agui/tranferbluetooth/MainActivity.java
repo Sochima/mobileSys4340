@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileObserver;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int DISCOVER_DURATION = 300;
     private static final int REQUEST_BLU = 1;
 
+    DirectoryFileObserver dfo;
     String path;
 
     private static final String[] INITIAL_PERMS = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textView_FileName;
 
+    //FileObserver observer = new FileObserver("/storage/emulated/0/Download");
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +58,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         textView_FileName = (TextView) findViewById(R.id.textView_FileName);
 
+        dfo = new DirectoryFileObserver("/storage/emulated/0/Download");
+        dfo.startWatching();
+
         if (!canAccessLocation() || !canAccessCamera() || !canAccessWriteStorage() || !canAccessReadStorage() || !canAccessReadContacts() || !canAccessWriteContacts()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
             }
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        String ret = dfo.getPath();
+        File temp = new File(ret);
+
+        if(dfo.mod != temp.lastModified()){
+            //call sync
+            Log.e("OnPResume", dfo.mod + "/n" + temp.lastModified());
+        }
+        dfo.startWatching();
+    }
+
+    @Override
+    public void onPostResume(){
+        super.onPostResume();
+
     }
 
     @Override
@@ -269,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                     null);
             if (cursor != null && cursor.moveToFirst()) {
                 final int column_index = cursor.getColumnIndexOrThrow(column);
+               // System.out.println(uri.getPath());
                 return cursor.getString(column_index);
             }
         } finally {
