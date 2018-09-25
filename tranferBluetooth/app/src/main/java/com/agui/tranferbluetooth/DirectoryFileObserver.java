@@ -44,10 +44,11 @@ public class DirectoryFileObserver extends FileObserver {
                 Log.e("FO:", "MODIFY");
                 //Uri uri = Uri.parse(uriString);
                 resend.textView_FileName.setText("File Modified");
-                ContentValues val = new ContentValues();
-                val.put(BluetoothShare.URI,"/storage/emulated/0/Documents/helloWorld.txt");
-                val.put(BluetoothShare.DESTINATION, "B8:1D:AA:02:DO:AD");
-                val.put(BluetoothShare.DIRECTION, BluetoothShare.DIRECTION_OUTBOUND);
+//                ContentValues val = new ContentValues();
+//                val.put(BluetoothShare.URI,"content://storage/emulated/0/Documents");
+//                val.put(BluetoothShare.DESTINATION, "B8:1D:AA:02:DO:AD");
+//                val.put(BluetoothShare.DIRECTION, BluetoothShare.DIRECTION_OUTBOUND);
+                  resend.enableBluetooth();
 
 
 
