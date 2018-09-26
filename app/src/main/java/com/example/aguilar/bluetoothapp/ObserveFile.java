@@ -1,0 +1,66 @@
+package com.example.aguilar.bluetoothapp;
+
+import android.os.FileObserver;
+import android.util.Log;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+
+/**
+ * Created by aguil on 9/23/2018.
+ */
+
+public class ObserveFile extends FileObserver {
+    File absolutePath;
+    File check;
+    long mod;
+    BluetoothConnectionService mBluetoothConnection;
+
+    public ObserveFile(File path, BluetoothConnectionService mBluetoothConnection) {
+        super(String.valueOf(path), FileObserver.ALL_EVENTS);
+        absolutePath = path;
+        this.mBluetoothConnection = mBluetoothConnection;
+    }
+
+    @Override
+    public void onEvent(int event, String absolutePath) {
+
+        switch (event) {
+            case FileObserver.CREATE:
+                Log.e("FO:", "CREATE: " + absolutePath);
+                break;
+            case FileObserver.MODIFY:
+                Log.e("FO:", "MODIFY");
+                FileInputStream inStream = null;
+                StringBuilder inMessage = new StringBuilder();
+                int inChar;
+                try {
+                    inStream = new FileInputStream(check);
+                    while ((inChar = inStream.read()) != -1) {
+                        inMessage.append((char) inChar);
+                    }
+                    mBluetoothConnection.write(inMessage.toString().getBytes());
+                    DataCommunication.incomingMessages.setText("File modified by another app");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    try {
+                        assert inStream != null;
+                        inStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                break;
+        }
+
+    }
+}

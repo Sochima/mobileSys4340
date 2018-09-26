@@ -257,7 +257,6 @@ public class BluetoothConnectionService {
             Intent intent = new Intent(mContext, DataCommunication.class);
             mContext.startActivity(intent);
 
-            //dismiss the progressdialog when connection is established
             try{
                 mProgressDialog.dismiss();
             }catch (NullPointerException e){
