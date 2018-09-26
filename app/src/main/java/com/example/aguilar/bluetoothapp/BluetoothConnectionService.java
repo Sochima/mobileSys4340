@@ -1,8 +1,10 @@
-package com.agui.mobsysapp;
-
-/**
- * Created by aguil on 9/25/2018.
+/* William Caballero-Ramos, 1000885642
+ * Devony Powell, 1001237272
+ * CSE 4340 FAll 2018
+ * Lab 1 - An Introduction to Bluetooth and Consistency
  */
+
+package com.example.aguilar.bluetoothapp;
 
 
 
@@ -16,7 +18,6 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -253,7 +254,7 @@ public class BluetoothConnectionService {
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
-            Intent intent = new Intent(mContext, MessageActivity.class);
+            Intent intent = new Intent(mContext, DataCommunication.class);
             mContext.startActivity(intent);
 
             //dismiss the progressdialog when connection is established

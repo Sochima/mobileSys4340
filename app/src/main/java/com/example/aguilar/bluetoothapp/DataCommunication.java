@@ -1,14 +1,16 @@
-package com.agui.mobsysapp;
-
-/**
- * Created by aguil on 9/25/2018.
+/* William Caballero-Ramos, 1000885642
+ * Devony Powell, 1001237272
+ * CSE 4340 FALL 2018
+ * Lab 1 - An Introduction to Bluetooth and Consistency
  */
 
-import android.content.BroadcastReceiver;
+package com.example.aguilar.bluetoothapp;
+
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.content.BroadcastReceiver;
 import android.os.FileObserver;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -18,19 +20,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.content.IntentFilter;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.io.IOException;
+import android.widget.Toast;
 
-
-public class MessageActivity extends AppCompatActivity {
-    private static final String TAG = "MessageActivity";
+public class DataCommunication extends AppCompatActivity {
+    private static final String TAG = "DataCommunication";
 
     // Deals with file creation and tracking
     private FileObserver fileObserver;

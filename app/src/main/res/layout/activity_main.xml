@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.agui.mobsysapp.MainActivity"
+    tools:context="com.example.caballero_william.bluetoothapp.MainActivity"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
@@ -26,22 +26,26 @@
         android:textSize="18sp" />
 
     <ListView
-        android:layout_marginTop="16dp"
         android:id="@+id/lvNewDevices"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_width="wrap_content"
+        android:layout_height="337dp"
         android:layout_below="@+id/btnFindUnpairedDevices"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="@android:drawable/editbox_dropdown_light_frame"
         android:choiceMode="singleChoice"
-        android:listSelector="@android:color/darker_gray"/>
+        android:listSelector="@android:color/darker_gray" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btnStartConnection"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="197dp"
+        android:layout_marginRight="197dp"
+        android:layout_marginBottom="11dp"
         android:background="@color/colorPrimary"
         android:text="Start Connection"
         android:textColor="@android:color/white"

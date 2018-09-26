@@ -1,8 +1,10 @@
-package com.agui.mobsysapp;
-
-/**
- * Created by aguil on 9/25/2018.
+/* William Caballero-Ramos, 1000885642
+ * Devony Powell, 1001237272
+ * CSE 4340 FAll 2018
+ * Lab 1 - An Introduction to Bluetooth and Consistency
  */
+
+package com.example.aguilar.bluetoothapp;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
