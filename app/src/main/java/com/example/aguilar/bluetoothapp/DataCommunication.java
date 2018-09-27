@@ -42,8 +42,6 @@ public class DataCommunication extends AppCompatActivity {
     File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
     FileOutputStream fileOutputStream;
     String filename = "helloWorld.txt";
-    String folderName = "FileSync";
-    /* end of var names */
 
     Button btnSend;
     EditText etSend;
@@ -62,7 +60,7 @@ public class DataCommunication extends AppCompatActivity {
         mBluetoothConnection = BluetoothConnectionService.getInstance();
         // TODO
         observeFile = new ObserveFile(path, mBluetoothConnection);
-        observeFile.startWatching();
+
 
         btnSend = (Button) findViewById(R.id.btnSend);
         etSend = (EditText) findViewById(R.id.editText);
