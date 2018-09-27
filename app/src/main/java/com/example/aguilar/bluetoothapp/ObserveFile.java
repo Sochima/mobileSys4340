@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
+
 /**
  * Created by aguil on 9/23/2018.
  */
@@ -29,12 +30,10 @@ public class ObserveFile extends FileObserver {
     @Override
     public void onEvent(int event, String absolutePath) {
 
-        //switch (event) {
-            //case FileObserver.CREATE:
-                //Log.e("FO:", "CREATE: " + absolutePath);
-                //break;
             if(FileObserver.MODIFY == 2) {
+
                 Log.e("FO:", "MODIFY");
+
                 FileInputStream inStream = null;
                 StringBuilder inMessage = new StringBuilder();
                 int inChar;
@@ -44,6 +43,7 @@ public class ObserveFile extends FileObserver {
                         inMessage.append((char) inChar);
                     }
                     mBluetoothConnection.write(inMessage.toString().getBytes());
+
                     DataCommunication.incomingMessages.setText("File modified by another app");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -60,8 +60,5 @@ public class ObserveFile extends FileObserver {
                     }
                 }
             }
-               // break;
-        //}
-
     }
 }

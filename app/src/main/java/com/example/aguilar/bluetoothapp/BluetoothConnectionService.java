@@ -17,7 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
+import android.os.FileObserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -250,6 +250,7 @@ public class BluetoothConnectionService {
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "ConnectedThread: Starting.");
 
+
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -276,6 +277,10 @@ public class BluetoothConnectionService {
         }
 
         public void run(){
+
+
+
+
             byte[] buffer = new byte[1024];  // buffer store for the stream
 
             int bytes; // bytes returned from read()
@@ -301,6 +306,7 @@ public class BluetoothConnectionService {
 
         //Call this from the main activity to send data to the remote device
         public void write(byte[] bytes) {
+
             String text = new String(bytes, Charset.defaultCharset());
             Log.d(TAG, "write: Writing to outputstream: " + text);
             try {
@@ -308,6 +314,7 @@ public class BluetoothConnectionService {
             } catch (IOException e) {
                 Log.e(TAG, "write: Error writing to output stream. " + e.getMessage() );
             }
+
         }
 
         /* Call this from the main activity to shutdown the connection */

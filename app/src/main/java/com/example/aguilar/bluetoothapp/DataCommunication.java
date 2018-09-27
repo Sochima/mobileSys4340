@@ -37,7 +37,8 @@ public class DataCommunication extends AppCompatActivity {
 
     // Deals with file creation and tracking
     /* TODO: change the names of the following variables */
-    ObserveFile observeFile;
+    public static ObserveFile observeFile;
+    public static boolean dontWatch = false;
     File file;
     File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
     FileOutputStream fileOutputStream;
@@ -60,6 +61,10 @@ public class DataCommunication extends AppCompatActivity {
         mBluetoothConnection = BluetoothConnectionService.getInstance();
         // TODO
         observeFile = new ObserveFile(path, mBluetoothConnection);
+        if(dontWatch)
+            observeFile.stopWatching();
+        else
+            observeFile.startWatching();
 
 
         btnSend = (Button) findViewById(R.id.btnSend);
