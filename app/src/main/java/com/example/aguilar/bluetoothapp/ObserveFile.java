@@ -1,3 +1,5 @@
+// Graciela Aguilar, 1000717478
+// Scott Laue, 1000860725
 package com.example.aguilar.bluetoothapp;
 
 import android.os.Environment;
