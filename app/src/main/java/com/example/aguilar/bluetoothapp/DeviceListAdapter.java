@@ -1,9 +1,5 @@
-/* William Caballero-Ramos, 1000885642
- * Devony Powell, 1001237272
- * CSE 4340 FAll 2018
- * Lab 1 - An Introduction to Bluetooth and Consistency
- */
-
+// Graciela Aguilar, 1000717478
+// Scott Laue, 1000860725
 package com.example.aguilar.bluetoothapp;
 
 import android.bluetooth.BluetoothDevice;

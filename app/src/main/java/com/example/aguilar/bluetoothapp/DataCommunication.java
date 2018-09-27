@@ -1,9 +1,5 @@
-/* William Caballero-Ramos, 1000885642
- * Devony Powell, 1001237272
- * CSE 4340 FALL 2018
- * Lab 1 - An Introduction to Bluetooth and Consistency
- */
-
+// Graciela Aguilar, 1000717478
+// Scott Laue, 1000860725
 package com.example.aguilar.bluetoothapp;
 import android.content.Context;
 import android.content.Intent;
@@ -52,8 +48,6 @@ public class DataCommunication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_view);
         file = new File(path, filename);
-
-        // TODO
         observe = new FileObserver(file.getPath()) {
 
 
