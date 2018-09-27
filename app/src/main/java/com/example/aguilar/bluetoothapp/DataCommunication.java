@@ -37,12 +37,12 @@ public class DataCommunication extends AppCompatActivity {
 
     // Deals with file creation and tracking
     /* TODO: change the names of the following variables */
-    public static ObserveFile observeFile;
     public static boolean dontWatch = false;
     File file;
     File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
     FileOutputStream fileOutputStream;
     String filename = "helloWorld.txt";
+    private FileObserver observe;
 
     Button btnSend;
     EditText etSend;
@@ -58,15 +58,52 @@ public class DataCommunication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message_view);
         file = new File(path, filename);
-        mBluetoothConnection = BluetoothConnectionService.getInstance();
+
         // TODO
-        observeFile = new ObserveFile(path, mBluetoothConnection);
-        if(dontWatch)
-            observeFile.stopWatching();
-        else
-            observeFile.startWatching();
+        observe = new FileObserver(file.getPath()) {
 
+            @Override
+            public void onEvent(int event, String path) {
 
+                switch (event) {
+
+                    case FileObserver.MODIFY:
+
+                        Log.e("FO:", "MODIFY");
+
+                        FileInputStream inStream = null;
+                        StringBuilder inMessage = new StringBuilder();
+                        int inChar;
+                        try {
+                            inStream = new FileInputStream(file);
+                            while ((inChar = inStream.read()) != -1) {
+                                inMessage.append((char) inChar);
+                            }
+                            mBluetoothConnection.write(inMessage.toString().getBytes());
+
+                            //DataCommunication.incomingMessages.setText("File modified by another app");
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                assert inStream != null;
+
+                                inStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
+                }
+
+            }
+
+    };
+            observe.startWatching();
+
+        mBluetoothConnection = BluetoothConnectionService.getInstance();
         btnSend = (Button) findViewById(R.id.btnSend);
         etSend = (EditText) findViewById(R.id.editText);
 
