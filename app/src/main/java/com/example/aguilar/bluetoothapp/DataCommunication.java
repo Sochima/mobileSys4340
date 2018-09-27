@@ -26,23 +26,29 @@ import java.util.concurrent.TimeUnit;
 import android.widget.Toast;
 
 public class DataCommunication extends AppCompatActivity {
-    private static final String TAG = "DataCommunication";
 
+    //initialize
+    boolean first = true;
     public static boolean dontWatch = false;
+    public static TextView incomingMessages;
+    StringBuilder messages;
+    BluetoothConnectionService mBluetoothConnection;
+
+
+    private static final String TAG = "DataCommunication";
+    private FileObserver observe;
+
     File file;
     File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
     FileOutputStream fileOutputStream;
     String filename = "helloWorld.txt";
-    private FileObserver observe;
 
-    Button btnSend;
-    EditText etSend;
-    boolean first = true;
+    //send items
+    Button sendButton;
+    EditText editTextItem;
 
-    public static TextView incomingMessages;
-    StringBuilder messages;
 
-    BluetoothConnectionService mBluetoothConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,30 +114,30 @@ public class DataCommunication extends AppCompatActivity {
 
 
         mBluetoothConnection = BluetoothConnectionService.getInstance();
-        btnSend = (Button) findViewById(R.id.btnSend);
-        etSend = (EditText) findViewById(R.id.editText);
+        sendButton = (Button) findViewById(R.id.btnSend);
+        editTextItem = (EditText) findViewById(R.id.editText);
 
         incomingMessages = (TextView) findViewById(R.id.incomingMessage);
         messages = new StringBuilder();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("incomingMessage"));
 
-        btnSend.setOnClickListener(new View.OnClickListener() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                byte[] bytes = etSend.getText().toString().getBytes(Charset.defaultCharset());
-                Log.d(TAG, "The btn send: " + etSend.getText().toString() + "\n\n");
+                byte[] bytes = editTextItem.getText().toString().getBytes(Charset.defaultCharset());
+                Log.d(TAG, "On Press: " + editTextItem.getText().toString() + "\n\n");
 
                 try {
-                    fileModify(etSend.getText().toString());
+                    fileModify(editTextItem.getText().toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 mBluetoothConnection.write(bytes);
-//                messages.append("Sent: " + etSend.getText().toString() + "\n");
+//                messages.append("Sent: " + editTextItem.getText().toString() + "\n");
 
                 //incomingMessages.setText("File Modified");
-                etSend.setText("");
+                editTextItem.setText("");
 
                 Context context = getApplicationContext();
                 CharSequence text = "Sent";
@@ -186,18 +192,15 @@ public class DataCommunication extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onReceive: STATE OFF");
+        Log.d(TAG, "onDestroy(): Flag");
         try {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
-            Log.d(TAG, "mReceiver unregistered");
 
         } catch (Exception e) {
-            Log.d(TAG, "mReceiver not registered");
+
         }
     }
 }
