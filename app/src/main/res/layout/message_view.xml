@@ -39,7 +39,7 @@
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="14dp"
-        android:text="This App will modify txt file in Documents"
+        android:text="App works in 30 second increments"
         android:textAppearance="@style/TextAppearance.Compat.Notification"
         android:textSize="18sp" />
 

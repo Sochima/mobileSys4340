@@ -5,15 +5,12 @@
  */
 
 package com.example.aguilar.bluetoothapp;
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.os.Environment;
 import android.os.FileObserver;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,21 +19,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.IntentFilter;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
-import java.util.Date;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 import android.widget.Toast;
 
 public class DataCommunication extends AppCompatActivity {
     private static final String TAG = "DataCommunication";
 
-    // Deals with file creation and tracking
-    /* TODO: change the names of the following variables */
     public static boolean dontWatch = false;
     File file;
     File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
@@ -46,13 +41,12 @@ public class DataCommunication extends AppCompatActivity {
 
     Button btnSend;
     EditText etSend;
+    boolean first = true;
 
     public static TextView incomingMessages;
     StringBuilder messages;
 
     BluetoothConnectionService mBluetoothConnection;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,14 +56,18 @@ public class DataCommunication extends AppCompatActivity {
         // TODO
         observe = new FileObserver(file.getPath()) {
 
+
             @Override
             public void onEvent(int event, String path) {
+
+
 
                 switch (event) {
 
                     case FileObserver.MODIFY:
 
                         Log.e("FO:", "MODIFY");
+                        observe.stopWatching();
 
                         FileInputStream inStream = null;
                         StringBuilder inMessage = new StringBuilder();
@@ -95,13 +93,25 @@ public class DataCommunication extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+                        try {
+                            TimeUnit.SECONDS.sleep(30);
+                            observe.startWatching();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                 }
 
             }
 
+
     };
+        if(first){
             observe.startWatching();
+            first = false;
+        }
+
+
 
         mBluetoothConnection = BluetoothConnectionService.getInstance();
         btnSend = (Button) findViewById(R.id.btnSend);
@@ -126,7 +136,7 @@ public class DataCommunication extends AppCompatActivity {
                 mBluetoothConnection.write(bytes);
 //                messages.append("Sent: " + etSend.getText().toString() + "\n");
 
-                incomingMessages.setText("File Modified");
+                //incomingMessages.setText("File Modified");
                 etSend.setText("");
 
                 Context context = getApplicationContext();
@@ -152,7 +162,7 @@ public class DataCommunication extends AppCompatActivity {
             }
 //            messages.append(text);
 
-            incomingMessages.setText("File Received");
+            //incomingMessages.setText("File Received");
 
         }
     };
